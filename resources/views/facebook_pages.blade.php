@@ -102,7 +102,7 @@
 			const data = new FormData(this);
 
 			//REQUISIÇÃO ASSÍNCRONA UTILIZANDO A FETCH API
-			fetch('http://localhost:8000/facebook', {
+			fetch('{{route('facebook')}}', {
 				method: 'POST',
 				body: data
 			})
