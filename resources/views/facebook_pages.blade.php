@@ -19,8 +19,8 @@
                         <textarea class="form-control" id="message" name="message"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="message-text" class="col-form-label">Imagem:</label>
-                        <input type="file" id="image" name="image">
+                        <label for="message-text" class="col-form-label">Imagem <b>(somente arquivos de imagem)</b>:</label>
+                        <input type="file" id="image" name="image" accept="image/*">
 					</div>
 					<div class="form-group">
 						<label for="scheduling" class="col-form-label">Agendar <b>(no mínimo 15 min a partir da data/hora atual)</b>: </label>

@@ -11,6 +11,9 @@ class FacebookManager {
         $this->fb_api = $facebook;
     }
 
+    /**
+     * Método responsável por obter as páginas do usuário logado com o Facebook.
+     */
     public function getFacebookPages($user) {
         $request = $this->fb_api->get('/me?fields=accounts', $user);
         $response = json_decode($request->getBody(), true);
@@ -19,6 +22,10 @@ class FacebookManager {
         return $pages;
     }
 
+    /**
+     * Método responsável tratar o request e por enviar postagens para o Facebook.
+     * @param Request $request
+     */
     public function postFacebookPage($request) {
         /*Array com o que será enviado ao facebook conforme o que é recebido na requisição.*/
         $payload = array();
