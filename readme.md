@@ -27,16 +27,16 @@ Após acessar o link, selecione o menu meus aplicativos e adicionar novo aplicat
 - FACEBOOK_APP_SECRET={chave secreta do aplicativo do facebook}
 
 - digite php artisan key:generate;
-- escolha um banco de dados e altere os dados de conexão do arquivo env conforme abaixo:
+- escolha um banco de dados e altere os dados de conexão do arquivo env conforme abaixo (sem pontos, sem espaços, com quebra de linha):
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=5432
-DB_DATABASE=nome_do_banco
-DB_USERNAME=nome_do_usuario
-DB_PASSWORD=senha_do_usuario
+- DB_CONNECTION=mysql
+- DB_HOST=127.0.0.1
+- DB_PORT=5432
+- DB_DATABASE=nome_do_banco
+- DB_USERNAME=nome_do_usuario
+- DB_PASSWORD=senha_do_usuario
 
-- execute o comando php artisan migrate.
+- execute o comando php artisan migrate;
 - execute php artisan serve e acesse a url do projeto por um web browser com o endereço localhost:8000;
 - ao clicar em login será solicitado usuário e senha do Facebook ou continuar como caso esteja logado, após inormar o usuário, deverá escolher as páginas a gerenciar e utilizar o sistema.
 
