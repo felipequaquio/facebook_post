@@ -21,7 +21,7 @@ Route::get('/home', 'FacebookController@getFacebookPages');
 Route::get('/login/facebook', 'Auth\LoginController@redirectToProvider');
 Route::get('login/facebook/callback', 'Auth\LoginController@handleProviderCallback');
 
-Route::get('/facebook/pages', 'FacebookController@getFacebookPages');
-Route::post('/facebookPagePost', 'FacebookController@postFacebookPage')->name('facebookPagePost');
+Route::get('/facebook', 'FacebookController@getFacebookPages');
+Route::post('/facebook', 'FacebookController@postFacebookPage')->name('facebook');
 
 
