@@ -1,6 +1,8 @@
 # Facebook-Post
 Repositório criado para contrução de uma aplicação teste para realizar e agendar postagens de imagens e mensagens para páginas do Facebook.
 
+**Endereço de produção: http://fb-post.herokuapp.com**
+
 **É necessário criar um aplicativo no Facebook developers**
 
 [Para criar aplicativos do facebook acesse este link](https://developers.facebook.com)
