@@ -5,13 +5,13 @@ Repositório criado para contrução de uma aplicação teste para realizar e ag
 
 [Para criar aplicativos do facebook acesse este link](https://developers.facebook.com)
 
-Após acessar o link selecione o menu meus aplicativos e adicionar novo aplicativo.
+Após acessar o link, selecione o menu meus aplicativos e adicionar novo aplicativo.
 
 **Para executar a aplicação local com o aplicativo, execute os seguintes passos:** 
 
 - acesse a página principal do aplicativo no Facebook Developers, selecione configuração, básico;
 - em domínios, insira localhost;
-- desca a barra de rolagem (na mesma configuração), em site, URL do site insira: http://localhost:8000/;
+- desca a barra de rolagem (na mesma configuração), em site, URL do site e insira: http://localhost:8000/;
 
 **Algumas aplicações do Facebook exigem um certificado ssl (https), caso não funcione, poderá utilizar o ngrok para realizar um tunelamento do seu localhost com certificado ssl e inserir a url gerada no lugar de localhost como descrito anteriormente.**
 
