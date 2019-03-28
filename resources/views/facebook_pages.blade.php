@@ -13,7 +13,7 @@
 			</div>
 			<!-- FORMULÁRIO -->
             <div class="modal-body">
-                <form method="POST" action="{{route('facebookPagePost')}}" id="facebookForm">
+                <form method="POST" action="{{route('facebook')}}" id="facebookForm">
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Mensagem:</label>
                         <textarea class="form-control" id="message" name="message"></textarea>
@@ -79,7 +79,16 @@
 		const form =  document.getElementById('facebookForm');
 		var btnModal = document.getElementById('btnModal');
 		var actionAlertContainer = document.getElementById('actionAlertContainer');
-		
+        var btnSubmitFacebookForm = document.getElementById('btnSubmitFacebookForm');
+        
+        btnSubmitFacebookForm.addEventListener('click', function(){
+            actionAlertContainer.classList.remove('alert-danger');
+            actionAlertContainer.classList.remove('alert-success');
+            actionAlertContainer.classList.add('alert-warning');
+            actionAlertContainer.innerHTML = '<b>Aguarde...</b>';
+            actionAlertContainer.style.visibility = 'visible';
+        });
+        
 		//BOTÃO PARA ABERTURA DO MODAL
 		btnModal.addEventListener('click', function(e) {
             document.getElementById('page_token').value = this.dataset.page_token;
@@ -93,7 +102,7 @@
 			const data = new FormData(this);
 
 			//REQUISIÇÃO ASSÍNCRONA UTILIZANDO A FETCH API
-			fetch('http://localhost:8000/facebookPagePost', {
+			fetch('http://localhost:8000/facebook', {
 				method: 'POST',
 				body: data
 			})
@@ -102,6 +111,7 @@
 				if (response.status == 200) {
 					form.reset();
 					actionAlertContainer.classList.remove('alert-danger');
+					actionAlertContainer.classList.remove('alert-warning');
 					actionAlertContainer.classList.add('alert-success');
                     actionAlertContainer.innerHTML = 'Ação realizada com sucesso.';
                     actionAlertContainer.style.visibility = 'visible';
@@ -113,6 +123,7 @@
                 if (response.status == 406) {
 					form.reset();
 					actionAlertContainer.classList.remove('alert-success');
+					actionAlertContainer.classList.remove('alert-warning');
 					actionAlertContainer.classList.add('alert-danger');
                     actionAlertContainer.innerHTML = 'Ação não realizada';
                     actionAlertContainer.style.visibility = 'visible';
