@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/facebook/pages';
+    protected $redirectTo = '/facebook';
 
     /**
      * Create a new controller instance.
