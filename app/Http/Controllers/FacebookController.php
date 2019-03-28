@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Facebook\Facebook;
 use Facebook\Exceptions\FacebookResponseException;
+use Illuminate\Support\Arr;
 
 class FacebookController extends Controller
 {
@@ -19,11 +20,11 @@ class FacebookController extends Controller
     public function getFacebookPages()
     {
         try {
-            $request = $this->fb_api->get('/me?fields=accounts', 'EAAE6gfPUZCFgBABwcfCKYLGPvYhAVnKoqE0IQh5sju5jy3PMBuzir1uURMx4lynhfEg1dgHXec06Yboo23fvIofHGJECXDud2Yh3a1rVOSoma9plUAX7UfI8StZAyWbYu5ZBVDKdblW4KLBZBVkIgg0AsfZCD6BuxRVfZBGzSIxuWO9cCJKeWT');
+            $request = $this->fb_api->get('/me?fields=accounts', Auth::user()->token);
             $response = json_decode($request->getBody(), true);
             $pages = $response['accounts']['data'];
 
-            return view('home', compact('pages'));
+            return view('facebook_pages', compact('pages'));
         } catch (Facebook\Exceptions\FacebookResponseException $e) {
             echo 'Facebook SDK error: ' . $e->getMessage();
         }
@@ -31,55 +32,50 @@ class FacebookController extends Controller
 
     public function postFacebookPage(Request $request)
     {
-        try {
-            // $message = $request['message'];
-            // $access_token = $request['access_token'];
-            // $page_id = $request['page_id'];
-            $message = 'TEST HTTP NEW 1';
-            $page_id = '430266707720161';
-            $access_token = 'EAAE6gfPUZCFgBAJK3oLA69aAYJ6uP2Kl1opIILezUAZC6uBREuDuIHdC3vIKhSYg2KusAjQdZAlyooqG69FFx32rsBwHYhSXqC9LAkjAcUdYzS7iBliZAbtDeVx7KOw4mgL2eknAPzAasAdTlxwzJHS2bDrzMIvT9hqmUq891mOtzKATKtz5wo5rn2k47ZCwZD';
+        $payload = array();
+        $action = "";
+
+        if ($request['scheduling']) {
+            $scheduling = strtotime($request['scheduling']);
+            $payload['scheduled_publish_time'] = strtotime("+3 hour", $scheduling);
+            $payload['published'] = 'false';
+        }
+
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $name = time() . '.' . $image->getClientOriginalName();
+            $folder = storage_path('images');
+            $image->move($folder, $name);
+            $absolute_path = $folder . '/' . $name;
+            $payload['source'] = $this->fb_api->fileToUpload($absolute_path);
+            $payload['message'] = $request['message'];
+            $action = '/photos';
+        }
+
+        if ($request['message'] && !($request['image'])) {
+            $payload['message'] = $request['message'];
+            $action = '/feed';
+        }
+        // var_dump($payload);exit;
+        if ($payload) {
+            $page_id = $request['page_id'];
+            $access_token = $request['page_token'];;
 
             $response = $this->fb_api->post(
-                '/' . $page_id . '/feed',
-                array('message' => $message),
+                '/' . $page_id . $action,
+                $payload,
                 $access_token
             );
 
             if ($response->getHttpStatusCode() == 200) {
-                return 'Postagem realizada com sucesso';
+                return response()->json([
+                    'response' => 'Postagem realizada'
+                ], 200);
             }
-
-            return 'Postagem não realizada';
-        } catch (Facebook\Exceptions\FacebookResponseException $e) {
-            echo 'Facebook SDK error: ' . $e->getMessage();
-        }
-    }
-
-    public function facebookImagePostPage(Request $request)
-    {
-        $image = $request->file('source');
-        $name = time() . '.' . $image->getClientOriginalName();
-        $folder = storage_path('images');
-        $image->move($folder, $name);
-        $absolute_path = $folder . '/' . $name;
-
-        $message = 'TEST IMAGE';
-        $page_id = '430266707720161';
-        $access_token = 'EAAE6gfPUZCFgBAJK3oLA69aAYJ6uP2Kl1opIILezUAZC6uBREuDuIHdC3vIKhSYg2KusAjQdZAlyooqG69FFx32rsBwHYhSXqC9LAkjAcUdYzS7iBliZAbtDeVx7KOw4mgL2eknAPzAasAdTlxwzJHS2bDrzMIvT9hqmUq891mOtzKATKtz5wo5rn2k47ZCwZD';
-
-        $response = $this->fb_api->post(
-            '/' . $page_id . '/feed',
-            array(
-                'message' => $message,
-                'source' => $this->fb_api->fileToUpload($absolute_path)
-            ),
-            $access_token
-        );
-
-        if ($response->getHttpStatusCode() == 200) {
-            return 'Postagem realizada com sucesso';
         }
 
-        return 'Postagem não realizada';
+        return response()->json([
+            'response' => 'Postagem não realizada'
+        ], 406);
     }
 }
