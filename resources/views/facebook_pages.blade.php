@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<!-- MODAL -->
 <div class="modal fade" id="facebookFormModal" tabindex="-1" role="dialog" aria-labelledby="sendMessageLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -9,7 +10,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-            </div>
+			</div>
+			<!-- FORMULÁRIO -->
             <div class="modal-body">
                 <form method="POST" action="{{route('facebookPagePost')}}" id="facebookForm">
                     <div class="form-group">
@@ -38,6 +40,7 @@
     </div>
 </div>
 
+<!-- TABELA -->
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -69,27 +72,33 @@
         </div>
     </div>
 </div>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const form =  document.getElementById('facebookForm');
+		//VARIÁVEIS
+		const form =  document.getElementById('facebookForm');
 		var btnModal = document.getElementById('btnModal');
 		var actionAlertContainer = document.getElementById('actionAlertContainer');
 		
+		//BOTÃO PARA ABERTURA DO MODAL
 		btnModal.addEventListener('click', function(e) {
             document.getElementById('page_token').value = this.dataset.page_token;
             document.getElementById('page_id').value = this.dataset.page_id;
         });
 
+		//EVENTO DE SUBMISSÃO DO FORMULÁRIO
        	form.addEventListener('submit', function(e) {
             e.preventDefault();
 
 			const data = new FormData(this);
 
+			//REQUISIÇÃO ASSÍNCRONA UTILIZANDO A FETCH API
 			fetch('http://localhost:8000/facebookPagePost', {
 				method: 'POST',
 				body: data
 			})
 			.then(function(response){
+				//TRATATIVA DE RETORNO PARA EXIBIR MENSAGEM DE SUCESSO
 				if (response.status == 200) {
 					form.reset();
 					actionAlertContainer.classList.remove('alert-danger');
@@ -100,6 +109,7 @@
 						actionAlertContainer.style.visibility = 'hidden';
 					}, 3000);
 				}
+				//TRATATIVA DE RETORNO PARA EXIBIR MENSAGEM DE ALERTA
                 if (response.status == 406) {
 					form.reset();
 					actionAlertContainer.classList.remove('alert-success');
