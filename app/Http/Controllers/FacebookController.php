@@ -18,7 +18,7 @@ class FacebookController extends Controller
     /**
      * Método responsável por obter as páginas do usuário logado com o Facebook.
      */
-    public function getFacebookPages()
+    public function index()
     {
         try {
             $pages = $this->facebook->getFacebookPages(Auth::user()->token);
@@ -35,6 +35,9 @@ class FacebookController extends Controller
      */
     public function postFacebookPage(Request $request)
     {
-        return $this->facebook->postFacebookPage($request);
+        $action = $this->facebook->checkFacebookAction($request);
+        $type = $this->facebook->checkFacebookTypePost($request);
+        $payload = $this->facebook->buildFacebookPayloadFromRequestType($request, $type);
+        return $this->facebook->postFacebookPage($request, $payload, $action);
     }
 }
